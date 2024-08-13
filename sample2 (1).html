@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON</title>
+</head>
+<body>
+    <h1>JSON</h1>
+    <div>
+        <h2>Object</h2>
+        <pre id="obj"></pre>
+    </div>
+    <div>
+        <h2>JSON</h2>
+        <pre id="json"></pre>
+    </div>
+    
+    <script>
+        let person = {
+            firstName: "Andrew",
+            lastName: "Anderson",
+            age: 20,
+            isStudent: true,
+            contactInfo: {
+                phone: "098-556-33-41",
+                email: "AndrewAnderson@gmail.com"
+            },
+            disciplines: [
+                "Programming", "Machine engineering", "English"
+            ]
+        };
+
+        function checkAge(key, value) {
+            if (key === "age" && value >= 18) {
+                return undefined;
+            }
+            return value;
+        }
+
+        // Serializace objektu na JSON řetězec
+        let jsonPerson = JSON.stringify(person, checkAge, 2);
+        // Zobrazení JSON řetězce v HTML
+        document.getElementById('json').textContent = jsonPerson;
+
+        // Převod objektu na čitelný text
+        let objText = JSON.stringify(person, null, 2);
+        // Zobrazení objektu v HTML
+        document.getElementById('obj').textContent = objText;
+    </script>
+</body>
+</html>

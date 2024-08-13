@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Serializace a Deserializace</title>
+</head>
+<body>
+    <h1>JSON Serializace a Deserializace</h1>
+    <div>
+        <h2>Serializace</h2>
+        <pre id="serialized"></pre>
+    </div>
+    <div>
+        <h2>Deserializace</h2>
+        <pre id="deserialized"></pre>
+    </div>
+
+    <script>
+        // Object
+        const person = {
+            name: "John",
+            age: 30,
+            city: "New York",
+            children: ["Anna", "Peter"]
+        };
+
+        // to JSON
+        const jsonString = JSON.stringify(person, null, 2); 
+
+        // write
+        document.getElementById('serialized').textContent = jsonString;
+
+        // to object
+        const parsedObj = JSON.parse(jsonString);
+
+        // write
+        document.getElementById('deserialized').textContent = JSON.stringify(parsedObj, null, 2);
+    </script>
+</body>
+</html>
