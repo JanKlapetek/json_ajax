@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cena Bitcoinu</title>
+</head>
+<body>
+    <h1>Aktuální cena Bitcoinu</h1>
+    <div id="bitcoin-price">Načítání...</div>
+    <button onclick="fetchBitcoinPrice()">Načíst aktuální cenu</button>
+
+    <script>
+        function fetchBitcoinPrice() {
+            // Vytvoření AJAX požadavku
+            var xhr = new XMLHttpRequest();
+            var url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=czk';
+
+            xhr.open('GET', url, true);
+
+            // Zpracování odpovědi
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    var bitcoinPrice = response.bitcoin.usd;
+                    document.getElementById('bitcoin-price').innerText = 'Cena Bitcoinu: ' + bitcoinPrice + ' czk';
+                } else {
+                    console.error('Chyba při načítání ceny Bitcoinu:', xhr.status);
+                    document.getElementById('bitcoin-price').innerText = 'Nepodařilo se načíst cenu Bitcoinu.';
+                }
+            };
+            xhr.send();
+        }
+
+        fetchBitcoinPrice();
+    </script>
+</body>
+</html>

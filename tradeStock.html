@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cena Akcie</title>
+</head>
+<body>
+    <h1>Aktuální cena akcie</h1>
+    
+    <label for="stock-select">Vyberte akcii:</label>
+    <select id="stock-select">
+        <option value="AAPL">Apple (AAPL)</option>
+        <option value="MSFT">Microsoft (MSFT)</option>
+        <option value="ABBNY">ABB Ltd (ABB)</option>
+        <option value="DIS">Disney</option>
+    </select>
+    
+    <button onclick="fetchStockPrice()">Načíst aktuální cenu</button>
+    
+    <div id="stock-price">Zde se zobrazí cena akcie...</div>
+
+    <script>
+        function fetchStockPrice() {
+            var apiKey = 'SOJ9PCLA3LGCQTOE'; // API key
+            var symbol = document.getElementById('stock-select').value;
+            var url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${apiKey}`;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    var stockPrice = response['Global Quote']['05. price'];
+                    if (stockPrice) {
+                        document.getElementById('stock-price').innerText = 'Cena akcie ' + symbol + ': ' + stockPrice + ' USD';
+                    } else {
+                        document.getElementById('stock-price').innerText = 'Nepodařilo se načíst cenu akcie.';
+                    }
+                } else {
+                    console.error('Chyba při načítání ceny akcie:', xhr.status);
+                    document.getElementById('stock-price').innerText = 'Nepodařilo se načíst cenu akcie.';
+                }
+            };
+
+            xhr.send();
+        }
+
+        setInterval(fetchStockPrice, 300000);
+        window.onload = fetchStockPrice;
+
+    </script>
+</body>
+</html>
