@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="author" content="ITnetwork.cz">
+		<title>Prohlížeč pokémonů</title>
+
+		<link rel="stylesheet" href="styles.css">
+	</head>
+
+	<body>
+		<div id="poke-container">
+			<div id="poke-seznam"></div>
+			<div id="poke-detaily"></div>
+		</div>
+
+		<script>
+			const apiUrl = "https://pokeapi.co/api/v2/";
+
+			async function stahniJSON(url) {
+				const response = await fetch(url);
+				return await response.json();
+			}
+
+			async function nactiSeznam(url) {
+				const seznam_div = document.getElementById("poke-seznam");
+				seznam_div.innerHTML = "<ul id='poke-seznam-ul'></ul>";
+				const seznam_ul = document.getElementById("poke-seznam-ul");
+
+				const data = await stahniJSON(url);
+				data.results.forEach(pokemon => {
+					const novaPolozka = document.createElement("li");
+					novaPolozka.innerText = pokemon.name;
+					seznam_ul.appendChild(novaPolozka);
+					novaPolozka.addEventListener("click", () => nactiPokemona(pokemon.url));
+				});
+			}
+
+			async function nactiPokemona(url) {
+				const detaily_div = document.getElementById("poke-detaily");
+				const data = await stahniJSON(url);
+				detaily_div.innerHTML = `
+					<img src="${data.sprites.back_default}" />
+					<ul>
+						<li>Název: ${data.name}</li>
+						<li>Výška: ${data.height}</li>
+						<li>Váha: ${data.weight}</li>
+					</ul>
+				`;
+			}
+
+			nactiSeznam(apiUrl + "pokemon");
+
+		</script>
+	</body>
+</html>
