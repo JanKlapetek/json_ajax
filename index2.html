@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="author" content="ITnetwork.cz">
+		<title>Prohlížeč pokémonů</title>
+
+		<link rel="stylesheet" href="styles.css">
+	</head>
+
+	<body>
+		<div id="poke-container">
+			<div id="poke-seznam"></div>
+			<div id="poke-detaily"></div>
+		</div>
+
+		<script>
+			let apiUrl = "https://pokeapi.co/api/v2/";
+
+			function stahniJSON(url, callback) {
+				let xhr = new XMLHttpRequest();
+				xhr.onload = function() {
+					callback(JSON.parse(xhr.response));
+				};
+				xhr.open("GET", url);
+				xhr.send();
+			}
+
+			function vytvorSeznamPokemonu(pokemon, seznam_ul) {
+				let novaPolozka = document.createElement("li");
+				novaPolozka.innerText = pokemon.name;
+				seznam_ul.appendChild(novaPolozka);
+				novaPolozka.addEventListener("click", function() {
+					nactiPokemona(pokemon.url);
+				});
+			}
+
+			function nactiSeznam(url) {
+				let seznam_div = document.getElementById("poke-seznam");
+				seznam_div.innerHTML = "<ul id='poke-seznam-ul'></ul>";
+				let seznam_ul = document.getElementById("poke-seznam-ul");
+
+				stahniJSON(url, function(data) {
+					data.results.forEach(function(pokemon) {
+						vytvorSeznamPokemonu(pokemon, seznam_ul);
+					});
+				});
+			}
+
+			function nactiPokemona(url) {
+				let detaily_div = document.getElementById("poke-detaily");
+				stahniJSON(url, function(data) {
+					detaily_div.innerHTML = `
+						<img src="${data.sprites.back_default}" />
+						<ul>
+							<li>Název: ${data.name}</li>
+							<li>Výška: ${data.height}</li>
+						</ul>
+					`;
+				});
+			}
+
+			nactiSeznam(apiUrl + "pokemon");
+		</script>
+	</body>
+</html>
